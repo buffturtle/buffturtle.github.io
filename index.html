@@ -7,97 +7,166 @@
 </head>
 <body>
     <h1>Workout Generator</h1>
-    <p>Answer these questions to get a basic workout recommendation based on your equipment and target muscles.</p>
+    <p>Answer these questions one at a time to get a basic workout recommendation.</p>
 
     <form id="quizForm">
-        <div>
+        <section id="question1">
             <h2>1: What equipment do you have?</h2>
             <label>
                 <input type="radio" name="equipment" value="bodyweight" required>
+                <img width="120" src="https://via.placeholder.com/120?text=Bodyweight" alt="Bodyweight image">
                 Bodyweight only
             </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="bars">
+                <img width="120" src="https://via.placeholder.com/120?text=Bars" alt="Bars image">
                 Bodyweight with bars (dip bars or pull-up bars)
             </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="dumbbells">
+                <img width="120" src="https://via.placeholder.com/120?text=Dumbbells" alt="Dumbbells image">
                 Dumbbells
             </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="gym">
+                <img width="120" src="https://via.placeholder.com/120?text=Gym" alt="Gym image">
                 Gym equipment (barbells, machines, cables)
             </label>
-        </div>
+            <br>
+            <button type="button" id="next1">Next</button>
+        </section>
 
-        <div>
+        <section id="question2" hidden>
             <h2>2: What muscles do you want to target?</h2>
             <label>
                 <input type="checkbox" name="muscle" value="chest">
+                <img width="120" src="https://via.placeholder.com/120?text=Chest" alt="Chest image">
                 Chest (push movements, upper and lower pectorals)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="back">
+                <img width="120" src="https://via.placeholder.com/120?text=Back" alt="Back image">
                 Back (pulling muscles, lats, traps, erector spinae)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="shoulders">
+                <img width="120" src="https://via.placeholder.com/120?text=Shoulders" alt="Shoulders image">
                 Shoulders (deltoids and rotator cuff)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="arms">
+                <img width="120" src="https://via.placeholder.com/120?text=Arms" alt="Arms image">
                 Arms (biceps, triceps, forearms)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="core">
+                <img width="120" src="https://via.placeholder.com/120?text=Core" alt="Core image">
                 Core (abs, obliques, deep core muscles)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="legs">
+                <img width="120" src="https://via.placeholder.com/120?text=Legs" alt="Legs image">
                 Legs & lower body (quads, hamstrings, glutes, calves)
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="neck">
+                <img width="120" src="https://via.placeholder.com/120?text=Neck" alt="Neck image">
                 Neck (neck flexors and extensors)
             </label>
-        </div>
+            <br>
+            <button type="button" id="next2">Next</button>
+        </section>
 
-        <button type="submit">Submit</button>
+        <section id="question3" hidden>
+            <h2>3: How long do you want your workout to be?</h2>
+            <label>
+                <input type="radio" name="length" value="15" required>
+                <img width="120" src="https://via.placeholder.com/120?text=15+min" alt="15 minute workout image">
+                15 minutes
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="length" value="30">
+                <img width="120" src="https://via.placeholder.com/120?text=30+min" alt="30 minute workout image">
+                30 minutes
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="length" value="45">
+                <img width="120" src="https://via.placeholder.com/120?text=45+min" alt="45 minute workout image">
+                45 minutes
+            </label>
+            <br>
+            <button type="button" id="submitButton">Submit</button>
+        </section>
     </form>
 
-    <div id="resultBox"></div>
+    <div id="resultBox" hidden></div>
+    <button type="button" id="redoButton" hidden>Redo Quiz</button>
 
     <script>
         const quizForm = document.getElementById('quizForm');
         const resultBox = document.getElementById('resultBox');
+        const redoButton = document.getElementById('redoButton');
+        const question1 = document.getElementById('question1');
+        const question2 = document.getElementById('question2');
+        const question3 = document.getElementById('question3');
+        const next1 = document.getElementById('next1');
+        const next2 = document.getElementById('next2');
+        const submitButton = document.getElementById('submitButton');
 
-        quizForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+        function showSection(section) {
+            question1.hidden = true;
+            question2.hidden = true;
+            question3.hidden = true;
+            section.hidden = false;
+        }
 
+        next1.addEventListener('click', function() {
             const equipment = document.querySelector('input[name="equipment"]:checked');
-            const muscleCheckboxes = document.querySelectorAll('input[name="muscle"]:checked');
-
             if (!equipment) {
-                resultBox.textContent = 'Please select the equipment you have.';
+                resultBox.textContent = 'Please select your equipment before moving on.';
+                resultBox.hidden = false;
                 return;
             }
+            resultBox.hidden = true;
+            showSection(question2);
+        });
 
-            if (muscleCheckboxes.length === 0) {
-                resultBox.textContent = 'Please select at least one muscle group to target.';
+        next2.addEventListener('click', function() {
+            const muscles = document.querySelectorAll('input[name="muscle"]:checked');
+            if (muscles.length === 0) {
+                resultBox.textContent = 'Please choose at least one muscle group.';
+                resultBox.hidden = false;
+                return;
+            }
+            resultBox.hidden = true;
+            showSection(question3);
+        });
+
+        submitButton.addEventListener('click', function() {
+            const equipment = document.querySelector('input[name="equipment"]:checked');
+            const muscles = document.querySelectorAll('input[name="muscle"]:checked');
+            const length = document.querySelector('input[name="length"]:checked');
+
+            if (!equipment || muscles.length === 0 || !length) {
+                resultBox.textContent = 'Please complete every question before submitting.';
+                resultBox.hidden = false;
                 return;
             }
 
             const equipmentValue = equipment.value;
-            const targets = Array.from(muscleCheckboxes).map(input => input.value);
+            const targetMuscles = Array.from(muscles).map(input => input.value);
+            const workoutLength = length.value;
 
             const workoutMap = {
                 bodyweight: {
@@ -138,13 +207,36 @@
                 }
             };
 
-            const selectedWorkouts = targets.map(target => {
+            let results = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>';
+            results += '<p><strong>Workout length:</strong> ' + workoutLength + ' minutes</p>';
+            results += '<p><strong>Targets:</strong> ' + targetMuscles.join(', ') + '</p>';
+
+            targetMuscles.forEach(function(target) {
                 const workout = workoutMap[equipmentValue][target];
-                const label = target.charAt(0).toUpperCase() + target.slice(1);
-                return '<p><strong>' + label + ':</strong> ' + workout + '</p>';
+                results += '<p><strong>' + target.charAt(0).toUpperCase() + target.slice(1) + ':</strong> ' + workout + '</p>';
             });
 
-            resultBox.innerHTML = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>' + selectedWorkouts.join('');
+            if (workoutLength === '15') {
+                results += '<p>This is a short session. Focus on 2 or 3 exercises and keep rest periods brief.</p>';
+            } else if (workoutLength === '30') {
+                results += '<p>This is a medium-length workout. You can do 3 to 4 exercises with steady pacing.</p>';
+            } else if (workoutLength === '45') {
+                results += '<p>This is a longer session. You have room for more volume and a broader mix of movements.</p>';
+            }
+
+            resultBox.innerHTML = results;
+            resultBox.hidden = false;
+            quizForm.hidden = true;
+            redoButton.hidden = false;
+        });
+
+        redoButton.addEventListener('click', function() {
+            quizForm.reset();
+            showSection(question1);
+            quizForm.hidden = false;
+            resultBox.hidden = true;
+            resultBox.textContent = '';
+            redoButton.hidden = true;
         });
     </script>
 </body>
