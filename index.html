@@ -3,52 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Quiz</title>
+    <title>Workout Generator</title>
 </head>
 <body>
-    <h1>Image Choice Quiz</h1>
-    <p>Choose the pictures that feel most like you. You can select more than one.</p>
+    <h1>Workout Generator</h1>
+    <p>Answer these questions to get a basic workout recommendation based on your equipment and target muscles.</p>
 
     <form id="quizForm">
         <div>
-            <h2>Question 1: Which images match your personality?</h2>
+            <h2>1: What equipment do you have?</h2>
             <label>
-                <input type="checkbox" name="choice1" value="sunny">
-                <img src="https://via.placeholder.com/120?text=Sunny" alt="Sunny image">
-                Sunny
+                <input type="radio" name="equipment" value="bodyweight" required>
+                Bodyweight only
             </label>
             <br>
             <label>
-                <input type="checkbox" name="choice1" value="star">
-                <img src="https://via.placeholder.com/120?text=Star" alt="Star image">
-                Star
+                <input type="radio" name="equipment" value="bars">
+                Bodyweight with bars (dip bars or pull-up bars)
             </label>
             <br>
             <label>
-                <input type="checkbox" name="choice1" value="wave">
-                <img src="https://via.placeholder.com/120?text=Wave" alt="Wave image">
-                Wave
+                <input type="radio" name="equipment" value="dumbbells">
+                Dumbbells
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="equipment" value="gym">
+                Gym equipment (barbells, machines, cables)
             </label>
         </div>
 
         <div>
-            <h2>Question 2: Which images match your personality?</h2>
+            <h2>2: What muscles do you want to target?</h2>
             <label>
-                <input type="checkbox" name="choice2" value="sunny">
-                <img src="https://via.placeholder.com/120?text=Sunny" alt="Sunny image">
-                Sunny
+                <input type="checkbox" name="muscle" value="chest">
+                Chest (push movements, upper and lower pectorals)
             </label>
             <br>
             <label>
-                <input type="checkbox" name="choice2" value="star">
-                <img src="https://via.placeholder.com/120?text=Star" alt="Star image">
-                Star
+                <input type="checkbox" name="muscle" value="back">
+                Back (pulling muscles, lats, traps, erector spinae)
             </label>
             <br>
             <label>
-                <input type="checkbox" name="choice2" value="wave">
-                <img src="https://via.placeholder.com/120?text=Wave" alt="Wave image">
-                Wave
+                <input type="checkbox" name="muscle" value="shoulders">
+                Shoulders (deltoids and rotator cuff)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="muscle" value="arms">
+                Arms (biceps, triceps, forearms)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="muscle" value="core">
+                Core (abs, obliques, deep core muscles)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="muscle" value="legs">
+                Legs & lower body (quads, hamstrings, glutes, calves)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="muscle" value="neck">
+                Neck (neck flexors and extensors)
             </label>
         </div>
 
@@ -64,32 +83,68 @@
         quizForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const selected1 = Array.from(document.querySelectorAll('input[name="choice1"]:checked')).map(input => input.value);
-            const selected2 = Array.from(document.querySelectorAll('input[name="choice2"]:checked')).map(input => input.value);
-            const selected = selected1.concat(selected2);
+            const equipment = document.querySelector('input[name="equipment"]:checked');
+            const muscleCheckboxes = document.querySelectorAll('input[name="muscle"]:checked');
 
-            if (selected.length === 0) {
-                resultBox.textContent = 'Please choose at least one image.';
+            if (!equipment) {
+                resultBox.textContent = 'Please select the equipment you have.';
                 return;
             }
 
-            let message = 'You selected: ' + selected.join(', ') + '. ';
-
-            if (selected.includes('sunny') && selected.includes('wave')) {
-                message += 'You are warm and calm.';
-            } else if (selected.includes('star') && selected.includes('sunny')) {
-                message += 'You are bright and confident.';
-            } else if (selected.includes('wave') && selected.includes('star')) {
-                message += 'You are creative and flowing.';
-            } else if (selected.includes('sunny')) {
-                message += 'You are cheerful.';
-            } else if (selected.includes('star')) {
-                message += 'You are shining.';
-            } else if (selected.includes('wave')) {
-                message += 'You are relaxed.';
+            if (muscleCheckboxes.length === 0) {
+                resultBox.textContent = 'Please select at least one muscle group to target.';
+                return;
             }
 
-            resultBox.textContent = message;
+            const equipmentValue = equipment.value;
+            const targets = Array.from(muscleCheckboxes).map(input => input.value);
+
+            const workoutMap = {
+                bodyweight: {
+                    chest: 'Decline push-ups, standard push-ups, scapular push-ups.',
+                    back: 'Inverted rows, pull-up negatives, supermans.',
+                    shoulders: 'Pike push-ups, handstand practice, rear delt floor flies.',
+                    arms: 'Diamond push-ups, bodyweight tricep extensions, doorframe curls.',
+                    core: 'Planks, hollow body holds, leg raises.',
+                    legs: 'Bodyweight squats, lunges, glute bridges, calf raises.',
+                    neck: 'Prone neck extensions, supine neck flexion with slow control.'
+                },
+                bars: {
+                    chest: 'Incline feet-elevated pike push-ups, chest dips, ring push-ups.',
+                    back: 'Pull-ups, chin-ups, inverted rows, hanging scapular shrugs.',
+                    shoulders: 'Dips with vertical torso, hanging shoulder raises, assisted handstands.',
+                    arms: 'Close-grip chin-ups, tricep dips, neutral-grip pull-ups.',
+                    core: 'Hanging leg raises, toes-to-bar, L-sits on dip bars.',
+                    legs: 'Assisted pistol squats, Bulgarian split squats using bars, step-ups.',
+                    neck: 'Use bands or careful bodyweight neck control exercises off the bars.'
+                },
+                dumbbells: {
+                    chest: 'Incline dumbbell bench press, dumbbell flyes, dumbbell pullovers.',
+                    back: 'Single-arm dumbbell rows, dumbbell shrugs, dumbbell pullovers.',
+                    shoulders: 'Dumbbell shoulder press, lateral raises, rear delt raises.',
+                    arms: 'Incline dumbbell curls, hammer curls, overhead dumbbell extensions.',
+                    core: 'Dumbbell side bends, weighted Russian twists, dumbbell planks.',
+                    legs: 'Dumbbell squats, lunges, Romanian deadlifts, calf raises.',
+                    neck: 'Light dumbbell neck flexion and extension only with care.'
+                },
+                gym: {
+                    chest: 'Incline barbell bench press, cable crossovers, machine chest press.',
+                    back: 'Lat pulldowns, barbell rows, seated cable rows.',
+                    shoulders: 'Overhead barbell press, cable lateral raises, rear delt cable flyes.',
+                    arms: 'Preacher curls, cable pushdowns, cable hammer curls.',
+                    core: 'Cable crunches, ab wheel rollouts, captain’s chair leg raises.',
+                    legs: 'Back squats, leg press, Romanian deadlifts, seated calf raises.',
+                    neck: 'Neck harness extensions, light weighted neck flexion.'
+                }
+            };
+
+            const selectedWorkouts = targets.map(target => {
+                const workout = workoutMap[equipmentValue][target];
+                const label = target.charAt(0).toUpperCase() + target.slice(1);
+                return '<p><strong>' + label + ':</strong> ' + workout + '</p>';
+            });
+
+            resultBox.innerHTML = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>' + selectedWorkouts.join('');
         });
     </script>
 </body>
