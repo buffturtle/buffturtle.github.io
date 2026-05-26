@@ -85,29 +85,10 @@
             <br>
             <button type="button" id="next2">Next</button>
         </section>
+    </form>
 
-        <section id="question3" hidden>
-            <h2>3: How long do you want your workout to be?</h2>
-            <label>
-                <input type="radio" name="length" value="15" required>
-                <img width="120" src="https://via.placeholder.com/120?text=15+min" alt="15 minute workout image">
-                15 minutes
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="length" value="30">
-                <img width="120" src="https://via.placeholder.com/120?text=30+min" alt="30 minute workout image">
-                30 minutes
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="length" value="45">
-                <img width="120" src="https://via.placeholder.com/120?text=45+min" alt="45 minute workout image">
-                45 minutes
-            </label>
-            <br>
-            <button type="button" id="submitButton">Submit</button>
-        </section>
+    <div id="resultBox" hidden></div>
+    <button type="button" id="redoButton" hidden>Redo Quiz</button>
     </form>
 
     <div id="resultBox" hidden></div>
@@ -119,15 +100,12 @@
         const redoButton = document.getElementById('redoButton');
         const question1 = document.getElementById('question1');
         const question2 = document.getElementById('question2');
-        const question3 = document.getElementById('question3');
         const next1 = document.getElementById('next1');
         const next2 = document.getElementById('next2');
-        const submitButton = document.getElementById('submitButton');
 
         function showSection(section) {
             question1.hidden = true;
             question2.hidden = true;
-            question3.hidden = true;
             section.hidden = false;
         }
 
@@ -143,22 +121,10 @@
         });
 
         next2.addEventListener('click', function() {
-            const muscles = document.querySelectorAll('input[name="muscle"]:checked');
-            if (muscles.length === 0) {
-                resultBox.textContent = 'Please choose at least one muscle group.';
-                resultBox.hidden = false;
-                return;
-            }
-            resultBox.hidden = true;
-            showSection(question3);
-        });
-
-        submitButton.addEventListener('click', function() {
             const equipment = document.querySelector('input[name="equipment"]:checked');
             const muscles = document.querySelectorAll('input[name="muscle"]:checked');
-            const length = document.querySelector('input[name="length"]:checked');
 
-            if (!equipment || muscles.length === 0 || !length) {
+            if (!equipment || muscles.length === 0) {
                 resultBox.textContent = 'Please complete every question before submitting.';
                 resultBox.hidden = false;
                 return;
@@ -166,7 +132,59 @@
 
             const equipmentValue = equipment.value;
             const targetMuscles = Array.from(muscles).map(input => input.value);
-            const workoutLength = length.value;
+
+            const workoutMap = {
+                bodyweight: {
+                    chest: 'Decline push-ups, standard push-ups, scapular push-ups.',
+                    back: 'Inverted rows, pull-up negatives, supermans.',
+                    shoulders: 'Pike push-ups, handstand practice, rear delt floor flies.',
+                    arms: 'Diamond push-ups, bodyweight tricep extensions, doorframe curls.',
+                    core: 'Planks, hollow body holds, leg raises.',
+                    legs: 'Bodyweight squats, lunges, glute bridges, calf raises.',
+                    neck: 'Prone neck extensions, supine neck flexion with slow control.'
+                },
+                bars: {
+                    chest: 'Incline feet-elevated pike push-ups, chest dips, ring push-ups.',
+                    back: 'Pull-ups, chin-ups, inverted rows, hanging scapular shrugs.',
+                    shoulders: 'Dips with vertical torso, hanging shoulder raises, assisted handstands.',
+                    arms: 'Close-grip chin-ups, tricep dips, neutral-grip pull-ups.',
+                    core: 'Hanging leg raises, toes-to-bar, L-sits on dip bars.',
+                    legs: 'Assisted pistol squats, Bulgarian split squats using bars, step-ups.',
+                    neck: 'Use bands or careful bodyweight neck control exercises off the bars.'
+                },
+                dumbbells: {
+                    chest: 'Incline dumbbell bench press, dumbbell flyes, dumbbell pullovers.',
+                    back: 'Single-arm dumbbell rows, dumbbell shrugs, dumbbell pullovers.',
+                    shoulders: 'Dumbbell shoulder press, lateral raises, rear delt raises.',
+                    arms: 'Incline dumbbell curls, hammer curls, overhead dumbbell extensions.',
+                    core: 'Dumbbell side bends, weighted Russian twists, dumbbell planks.',
+                    legs: 'Dumbbell squats, lunges, Romanian deadlifts, calf raises.',
+                    neck: 'Light dumbbell neck flexion and extension only with care.'
+                },
+                gym: {
+                    chest: 'Incline barbell bench press, cable crossovers, machine chest press.',
+                    back: 'Lat pulldowns, barbell rows, seated cable rows.',
+                    shoulders: 'Overhead barbell press, cable lateral raises, rear delt cable flyes.',
+                    arms: 'Preacher curls, cable pushdowns, cable hammer curls.',
+                    core: 'Cable crunches, ab wheel rollouts, captain’s chair leg raises.',
+                    legs: 'Back squats, leg press, Romanian deadlifts, seated calf raises.',
+                    neck: 'Neck harness extensions, light weighted neck flexion.'
+                }
+            };
+
+            let results = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>';
+            results += '<p><strong>Targets:</strong> ' + targetMuscles.join(', ') + '</p>';
+
+            targetMuscles.forEach(function(target) {
+                const workout = workoutMap[equipmentValue][target];
+                results += '<p><strong>' + target.charAt(0).toUpperCase() + target.slice(1) + ':</strong> ' + workout + '</p>';
+            });
+
+            resultBox.innerHTML = results;
+            resultBox.hidden = false;
+            quizForm.hidden = true;
+            redoButton.hidden = false;
+        });
 
             const workoutMap = {
                 bodyweight: {
