@@ -14,8 +14,8 @@
             <h2>1: What equipment do you have?</h2>
             <label>
                 <input type="radio" name="equipment" value="bodyweight" required>
-                <img width="120" src="https://via.placeholder.com/120?text=Bodyweight" alt="Bodyweight image">
-                Bodyweight only
+                <img width="120" src="bodyweight.gif" alt="pushup gif">
+                Bodyweight Only
             </label>
             <br>
             <label>
@@ -83,12 +83,8 @@
                 Neck (neck flexors and extensors)
             </label>
             <br>
-            <button type="button" id="next2">Next</button>
+            <button type="button" id="next2">Submit</button>
         </section>
-    </form>
-
-    <div id="resultBox" hidden></div>
-    <button type="button" id="redoButton" hidden>Redo Quiz</button>
     </form>
 
     <div id="resultBox" hidden></div>
@@ -179,68 +175,6 @@
                 const workout = workoutMap[equipmentValue][target];
                 results += '<p><strong>' + target.charAt(0).toUpperCase() + target.slice(1) + ':</strong> ' + workout + '</p>';
             });
-
-            resultBox.innerHTML = results;
-            resultBox.hidden = false;
-            quizForm.hidden = true;
-            redoButton.hidden = false;
-        });
-
-            const workoutMap = {
-                bodyweight: {
-                    chest: 'Decline push-ups, standard push-ups, scapular push-ups.',
-                    back: 'Inverted rows, pull-up negatives, supermans.',
-                    shoulders: 'Pike push-ups, handstand practice, rear delt floor flies.',
-                    arms: 'Diamond push-ups, bodyweight tricep extensions, doorframe curls.',
-                    core: 'Planks, hollow body holds, leg raises.',
-                    legs: 'Bodyweight squats, lunges, glute bridges, calf raises.',
-                    neck: 'Prone neck extensions, supine neck flexion with slow control.'
-                },
-                bars: {
-                    chest: 'Incline feet-elevated pike push-ups, chest dips, ring push-ups.',
-                    back: 'Pull-ups, chin-ups, inverted rows, hanging scapular shrugs.',
-                    shoulders: 'Dips with vertical torso, hanging shoulder raises, assisted handstands.',
-                    arms: 'Close-grip chin-ups, tricep dips, neutral-grip pull-ups.',
-                    core: 'Hanging leg raises, toes-to-bar, L-sits on dip bars.',
-                    legs: 'Assisted pistol squats, Bulgarian split squats using bars, step-ups.',
-                    neck: 'Use bands or careful bodyweight neck control exercises off the bars.'
-                },
-                dumbbells: {
-                    chest: 'Incline dumbbell bench press, dumbbell flyes, dumbbell pullovers.',
-                    back: 'Single-arm dumbbell rows, dumbbell shrugs, dumbbell pullovers.',
-                    shoulders: 'Dumbbell shoulder press, lateral raises, rear delt raises.',
-                    arms: 'Incline dumbbell curls, hammer curls, overhead dumbbell extensions.',
-                    core: 'Dumbbell side bends, weighted Russian twists, dumbbell planks.',
-                    legs: 'Dumbbell squats, lunges, Romanian deadlifts, calf raises.',
-                    neck: 'Light dumbbell neck flexion and extension only with care.'
-                },
-                gym: {
-                    chest: 'Incline barbell bench press, cable crossovers, machine chest press.',
-                    back: 'Lat pulldowns, barbell rows, seated cable rows.',
-                    shoulders: 'Overhead barbell press, cable lateral raises, rear delt cable flyes.',
-                    arms: 'Preacher curls, cable pushdowns, cable hammer curls.',
-                    core: 'Cable crunches, ab wheel rollouts, captain’s chair leg raises.',
-                    legs: 'Back squats, leg press, Romanian deadlifts, seated calf raises.',
-                    neck: 'Neck harness extensions, light weighted neck flexion.'
-                }
-            };
-
-            let results = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>';
-            results += '<p><strong>Workout length:</strong> ' + workoutLength + ' minutes</p>';
-            results += '<p><strong>Targets:</strong> ' + targetMuscles.join(', ') + '</p>';
-
-            targetMuscles.forEach(function(target) {
-                const workout = workoutMap[equipmentValue][target];
-                results += '<p><strong>' + target.charAt(0).toUpperCase() + target.slice(1) + ':</strong> ' + workout + '</p>';
-            });
-
-            if (workoutLength === '15') {
-                results += '<p>This is a short session. Focus on 2 or 3 exercises and keep rest periods brief.</p>';
-            } else if (workoutLength === '30') {
-                results += '<p>This is a medium-length workout. You can do 3 to 4 exercises with steady pacing.</p>';
-            } else if (workoutLength === '45') {
-                results += '<p>This is a longer session. You have room for more volume and a broader mix of movements.</p>';
-            }
 
             resultBox.innerHTML = results;
             resultBox.hidden = false;
