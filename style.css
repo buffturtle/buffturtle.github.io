@@ -2,9 +2,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background: linear-gradient(135deg, #f8f9ff, #dfe7ff);
-  color: #1f1f3d;
+  line-height: 1.5;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffffff, #e29696);
+  color: #000000;
 }
 
 .container {
@@ -26,21 +27,21 @@ h1 {
 
 h2 {
   margin-top: 1.8rem;
-  color: #32408f;
+  color: #410000;
 }
 
 p {
   max-width: 720px;
   margin: 0.8rem auto;
-  color: #323248;
+  color: #000000;
 }
 
 button,
 input[type="button"],
 input[type="submit"] {
   border: none;
-  background: #5563ff;
-  color: #fff;
+  background: #420000;
+  color: #ffffff;
   padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
@@ -50,11 +51,11 @@ input[type="submit"] {
 button:hover,
 input[type="button"]:hover,
 input[type="submit"]:hover {
-  background: #3b4ccd;
+  background: #000000;
 }
 
 .card {
-  background: #ffffff;
+  background: #000000;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(48, 63, 159, 0.1);
   padding: 24px;
@@ -70,7 +71,7 @@ nav {
 }
 
 nav a {
-  color: #5563ff;
+  color: #000000;
   text-decoration: none;
   font-weight: 600;
 }
@@ -83,7 +84,7 @@ footer {
   text-align: center;
   padding: 24px 0 12px;
   font-size: 0.95rem;
-  color: #5c5c7d;
+  color: #000000;
 }
 
 @media (max-width: 600px) {
