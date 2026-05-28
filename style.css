@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #f8f9ff, #dfe7ff);
+  color: #1f1f3d;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+header {
+  text-align: center;
+  padding: 40px 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.8rem;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 1.8rem;
+  color: #32408f;
+}
+
+p {
+  max-width: 720px;
+  margin: 0.8rem auto;
+  color: #323248;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+  border: none;
+  background: #5563ff;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+  background: #3b4ccd;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(48, 63, 159, 0.1);
+  padding: 24px;
+  margin: 24px 0;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+nav a {
+  color: #5563ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 0 12px;
+  font-size: 0.95rem;
+  color: #5c5c7d;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  .container {
+    padding: 20px 16px;
+  }
+
+  nav {
+    gap: 12px;
+  }
+}
