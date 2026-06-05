@@ -1,17 +1,22 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   line-height: 1.5;
   min-height: 100vh;
   background: linear-gradient(135deg, #ffffff, #e29696);
   color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
   padding: 30px 20px;
+  box-sizing: border-box;
 }
 
 header {
@@ -34,6 +39,39 @@ p {
   max-width: 720px;
   margin: 0.8rem auto;
   color: #000000;
+}
+
+/* Image hover caption */
+.img-wrap {
+  display: inline-block;
+  position: relative;
+  margin: 8px;
+}
+
+.img-wrap img {
+  display: block;
+  border-radius: 8px;
+}
+
+.caption {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  bottom: 6px;
+  background: rgba(255,255,255,0.95);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+  color: inherit;
+  font-family: 'Playfair Display', 'Poppins', serif;
+}
+
+.img-wrap:hover .caption {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
 }
 
 button,

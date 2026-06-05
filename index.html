@@ -4,37 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Generator</title>
-    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Workout Generator</h1>
-    <p>Answer these questions one at a time to get a basic workout recommendation.</p>
+        <div class="container">
+        <h1>Workout Generator</h1>
 
-    <form id="quizForm">
+        <form id="quizForm">
         <section id="question1">
             <h2>1: What equipment do you have?</h2>
-            <label>
-                <input type="radio" name="equipment" value="bodyweight" required>
-                <img width="120" src="bodyweight.gif" alt="pushup gif">
-                Bodyweight Only
-            </label>
+                        <label>
+                                <input type="radio" name="equipment" value="bodyweight" required>
+                                <div class="img-wrap">
+                                    <img width="120" src="bodyweight.gif" alt="pushup gif">
+                                    <span class="caption">Bodyweight Only</span>
+                                </div>
+                        </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="bars">
-                <img width="120" src="bar.gif" alt="pullup gif">
-                Bodyweight with bars (dip bars or pull-up bars)
+                                <div class="img-wrap">
+                                    <img width="120" src="bar.gif" alt="pullup gif">
+                                    <span class="caption">Bodyweight with bars (dip bars or pull-up bars)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="dumbbells">
-                <img width="120" src="curl.gif" alt="dumbell curls gif">
-                Dumbbells
+                                <div class="img-wrap">
+                                    <img width="120" src="curl.gif" alt="dumbell curls gif">
+                                    <span class="caption">Dumbbells</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="radio" name="equipment" value="gym">
-                <img width="120" src="rows.gif" alt="incline rows on cable machine gif">
-                Gym equipment (barbells, machines, cables)
+                                <div class="img-wrap">
+                                    <img width="120" src="rows.gif" alt="incline rows on cable machine gif">
+                                    <span class="caption">Gym equipment (barbells, machines, cables)</span>
+                                </div>
             </label>
             <br>
             <button type="button" id="next1">Next</button>
@@ -44,46 +53,60 @@
             <h2>2: What muscles do you want to target?</h2>
             <label>
                 <input type="checkbox" name="muscle" value="chest">
-                <img width="120" src="chest.jpg" alt="Chest image">
-                Chest (push movements, upper and lower pectorals)
+                                <div class="img-wrap">
+                                    <img width="120" src="chest.jpg" alt="Chest image">
+                                    <span class="caption">Chest (push movements, upper and lower pectorals)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="back">
-                <img width="120" src="back.jpg" alt="Back image">
-                Back (pulling muscles, lats, traps, erector spinae)
+                                <div class="img-wrap">
+                                    <img width="120" src="back.jpg" alt="Back image">
+                                    <span class="caption">Back (pulling muscles, lats, traps, erector spinae)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="shoulders">
-                <img width="120" src="shoulders.jpg" alt="Shoulders image">
-                Shoulders (deltoids and rotator cuff)
+                                <div class="img-wrap">
+                                    <img width="120" src="shoulders.jpg" alt="Shoulders image">
+                                    <span class="caption">Shoulders (deltoids and rotator cuff)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="arms">
-                <img width="120" src="biceps.jpg" alt="Biceps image">
-                <img width="120" src="trices.jpg" alt="Tricpes image">
-                <img width="120" src="forearms.jpg" alt="Forearms image">
-                Arms (biceps, triceps, forearms)
+                                <div class="img-wrap">
+                                    <img width="120" src="biceps.jpg" alt="Biceps image">
+                                    <img width="120" src="trices.jpg" alt="Tricpes image">
+                                    <img width="120" src="forearms.jpg" alt="Forearms image">
+                                    <span class="caption">Arms (biceps, triceps, forearms)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="core">
-                <img width="120" src="abs.jpg" alt="Core image">
-                Core (abs, obliques, deep core muscles)
+                                <div class="img-wrap">
+                                    <img width="120" src="abs.jpg" alt="Core image">
+                                    <span class="caption">Core (abs, obliques, deep core muscles)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="legs">
-                <img width="120" src="legs.jpg" alt="Legs image">
-                Legs & lower body (quads, hamstrings, glutes, calves)
+                                <div class="img-wrap">
+                                    <img width="120" src="legs.jpg" alt="Legs image">
+                                    <span class="caption">Legs & lower body (quads, hamstrings, glutes, calves)</span>
+                                </div>
             </label>
             <br>
             <label>
                 <input type="checkbox" name="muscle" value="neck">
-                <img width="120" src="neck.jpg" alt="Neck image">
-                Neck (neck flexors and extensors)
+                                <div class="img-wrap">
+                                    <img width="120" src="neck.jpg" alt="Neck image">
+                                    <span class="caption">Neck (neck flexors and extensors)</span>
+                                </div>
             </label>
             <br>
             <button type="button" id="next2">Submit</button>
@@ -92,6 +115,8 @@
 
     <div id="resultBox" hidden></div>
     <button type="button" id="redoButton" hidden>Redo Quiz</button>
+
+        </div>
 
     <script>
         const quizForm = document.getElementById('quizForm');
