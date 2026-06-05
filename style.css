@@ -137,3 +137,22 @@ footer {
     gap: 12px;
   }
 }
+
+.spacer {
+  height: 500vh;
+}
+
+.bottom-link {
+  text-align: center;
+  padding: 24px 0 48px;
+}
+
+.bottom-link a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bottom-link a:hover {
+  text-decoration: underline;
+}
