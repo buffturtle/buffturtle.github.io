@@ -1,223 +1,603 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout Generator</title>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7c6aff;
+    --accent2: #ff6a6a;
+    --accent3: #6affc8;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --done: #2a3a2a;
+    --done-text: #4a7a4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .date-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    height: 2px;
+    width: 100%;
+    position: sticky;
+    top: 61px;
+    z-index: 99;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  main { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+  .time-block {
+    margin-top: 32px;
+  }
+
+  .time-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .time-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .time-badge.red { background: var(--accent2); }
+  .time-badge.green { background: var(--accent3); color: #0a0f0a; }
+  .time-badge.yellow { background: #ffd96a; color: #0a0a0f; }
+  .time-badge.purple { background: #c46aff; }
+  .time-badge.allday { background: var(--muted); }
+
+  .time-rule { flex: 1; height: 1px; background: var(--border); }
+
+  .block-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item:hover { background: var(--surface2); }
+  .checklist-item.completed {
+    background: var(--done);
+    opacity: 0.6;
+  }
+
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .checklist-item.completed .check-box {
+    background: var(--accent3);
+    border-color: var(--accent3);
+  }
+  .check-box svg { display: none; }
+  .checklist-item.completed .check-box svg { display: block; }
+
+  .item-text {
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .checklist-item.completed .item-text {
+    text-decoration: line-through;
+    color: var(--done-text);
+  }
+
+  .item-arrow {
+    font-size: 11px;
+    color: var(--accent);
+    margin-left: 4px;
+    cursor: pointer;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 16px 4px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-only-label {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent2);
+    padding: 6px 16px;
+    background: rgba(255,106,106,0.06);
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.08em;
+  }
+
+  /* Teaching panels */
+  .teach-panel {
+    display: none;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    padding: 20px 18px;
+  }
+  .teach-panel.open { display: block; }
+
+  .teach-panel h3 {
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .morse-grid, .nato-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .morse-item, .nato-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+  }
+
+  .morse-item .char { color: var(--accent); font-size: 16px; font-weight: 700; }
+  .morse-item .code { color: var(--accent3); font-size: 13px; margin-top: 2px; }
+
+  .nato-item .letter { color: var(--accent); font-size: 15px; font-weight: 700; }
+  .nato-item .word { color: var(--text); font-size: 12px; margin-top: 1px; }
+  .nato-item .phonetic { color: var(--muted); font-size: 10px; }
+
+  .kali-section { margin-top: 10px; }
+  .kali-section p { font-size: 13px; line-height: 1.7; color: var(--text); margin-bottom: 8px; }
+  .kali-section strong { color: var(--accent3); }
+  .kali-section ul { padding-left: 18px; }
+  .kali-section li { font-size: 13px; line-height: 1.8; color: var(--text); }
+
+  .sub-checklist {
+    margin-top: 0;
+  }
+  .sub-checklist .checklist-item {
+    padding-left: 32px;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 32px auto 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .progress-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .morse-grid, .nato-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+  }
+</style>
 </head>
 <body>
-        <div class="container">
-        <h1>Workout Generator</h1>
 
-        <form id="quizForm">
-        <section id="question1">
-            <h2>1: What equipment do you have?</h2>
-                        <label>
-                                <input type="radio" name="equipment" value="bodyweight" required>
-                                <div class="img-wrap">
-                                    <img width="120" src="bodyweight.gif" alt="pushup gif">
-                                    <span class="caption">Bodyweight Only</span>
-                                </div>
-                        </label>
-            <br>
-            <label>
-                <input type="radio" name="equipment" value="bars">
-                                <div class="img-wrap">
-                                    <img width="120" src="bar.gif" alt="pullup gif">
-                                    <span class="caption">Bodyweight with bars (dip bars or pull-up bars)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="equipment" value="dumbbells">
-                                <div class="img-wrap">
-                                    <img width="120" src="curl.gif" alt="dumbell curls gif">
-                                    <span class="caption">Dumbbells</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="equipment" value="gym">
-                                <div class="img-wrap">
-                                    <img width="120" src="rows.gif" alt="incline rows on cable machine gif">
-                                    <span class="caption">Gym equipment (barbells, machines, cables)</span>
-                                </div>
-            </label>
-            <br>
-            <button type="button" id="next1">Next</button>
-        </section>
+<header>
+  <div class="logo">// Daily Protocol</div>
+  <div class="date-display" id="dateDisplay"></div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
 
-        <section id="question2" hidden>
-            <h2>2: What muscles do you want to target?</h2>
-            <label>
-                <input type="checkbox" name="muscle" value="chest">
-                                <div class="img-wrap">
-                                    <img width="120" src="chest.jpg" alt="Chest image">
-                                    <span class="caption">Chest (push movements, upper and lower pectorals)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="back">
-                                <div class="img-wrap">
-                                    <img width="120" src="back.jpg" alt="Back image">
-                                    <span class="caption">Back (pulling muscles, lats, traps, erector spinae)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="shoulders">
-                                <div class="img-wrap">
-                                    <img width="120" src="shoulders.jpg" alt="Shoulders image">
-                                    <span class="caption">Shoulders (deltoids and rotator cuff)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="arms">
-                                <div class="img-wrap">
-                                    <img width="120" src="biceps.jpg" alt="Biceps image">
-                                    <img width="120" src="trices.jpg" alt="Tricpes image">
-                                    <img width="120" src="forearms.jpg" alt="Forearms image">
-                                    <span class="caption">Arms (biceps, triceps, forearms)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="core">
-                                <div class="img-wrap">
-                                    <img width="120" src="abs.jpg" alt="Core image">
-                                    <span class="caption">Core (abs, obliques, deep core muscles)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="legs">
-                                <div class="img-wrap">
-                                    <img width="120" src="legs.jpg" alt="Legs image">
-                                    <span class="caption">Legs & lower body (quads, hamstrings, glutes, calves)</span>
-                                </div>
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="muscle" value="neck">
-                                <div class="img-wrap">
-                                    <img width="120" src="neck.jpg" alt="Neck image">
-                                    <span class="caption">Neck (neck flexors and extensors)</span>
-                                </div>
-            </label>
-            <br>
-            <button type="button" id="next2">Submit</button>
-        </section>
-    </form>
+<main id="app"></main>
 
-    <div id="resultBox" hidden></div>
-    <button type="button" id="redoButton" hidden>Redo Quiz</button>
+<script>
+const TODAY = new Date();
+const DAY = TODAY.getDay(); // 0=Sun,1=Mon,...,6=Sat
 
-        </div>
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+document.getElementById('dateDisplay').textContent = TODAY.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 
-    <script>
-        const quizForm = document.getElementById('quizForm');
-        const resultBox = document.getElementById('resultBox');
-        const redoButton = document.getElementById('redoButton');
-        const question1 = document.getElementById('question1');
-        const question2 = document.getElementById('question2');
-        const next1 = document.getElementById('next1');
-        const next2 = document.getElementById('next2');
+// ── DATA ─────────────────────────────────────────────────────────────────────
 
-        function showSection(section) {
-            question1.hidden = true;
-            question2.hidden = true;
-            section.hidden = false;
-        }
+const WORKOUT_BY_DAY = {
+  1: { label: 'Monday — Chin Ups & Bicep Push Ups', items: ['Chin Ups','Bicep Push Ups'] },
+  2: { label: 'Tuesday — Pike Push Ups, Handstands & HSPU', items: ['Pike Push Ups','Handstands','Handstand Push Ups (HSPU)'] },
+  3: { label: 'Wednesday — Pull Ups, Inverted Rows & Front Levers', items: ['Pull Ups','Inverted Rows','Front Levers'] },
+  4: { label: 'Thursday — Dips & Push Ups', items: ['Dips','Push Ups'] },
+  5: { label: 'Friday — Core Circuit', items: ['Crunches','Leg Raises','Dragon Flags','L-Sit / V-Sit','Hanging Knee/Leg Raises'] },
+  6: { label: 'Saturday — Wide Push Ups', items: ['Wide Push Ups'] },
+  0: { label: 'Sunday — Plyometrics', items: ['Jump Squats','Calf Raises'] },
+};
 
-        next1.addEventListener('click', function() {
-            const equipment = document.querySelector('input[name="equipment"]:checked');
-            if (!equipment) {
-                resultBox.textContent = 'Please select your equipment before moving on.';
-                resultBox.hidden = false;
-                return;
-            }
-            resultBox.hidden = true;
-            showSection(question2);
-        });
+const FRIDAY_FULL = [
+  'Explosive Push Ups',
+  'Explosive Punching Bag Combinations (long range)',
+  'Explosive Punching Bag Combinations (short range)',
+  'Fast Punching Bag Combinations (long range)',
+  'Fast Punching Bag Combinations (short range)',
+  'Footwork Drills',
+  'Headwork Drills',
+  'Reflex & Tennis Ball',
+  'Counter Punching',
+];
 
-        next2.addEventListener('click', function() {
-            const equipment = document.querySelector('input[name="equipment"]:checked');
-            const muscles = document.querySelectorAll('input[name="muscle"]:checked');
+const SUNDAY_FULL_ITEMS = [
+  'Taekwondo Practice',
+  'Knife Gripping (Kali) — see lesson below',
+  'Knife / Pencil Throwing Practice',
+];
 
-            if (!equipment || muscles.length === 0) {
-                resultBox.textContent = 'Please complete every question before submitting.';
-                resultBox.hidden = false;
-                return;
-            }
+const SUNDAY_BOOKS = [
+  'Small Unit Tactics — Matthew Luke',
+  'KUBARK Interrogation Manual',
+  'Visual Intelligence — Amy Herman',
+  'SAS Survival Handbook — Lofty Wiseman',
+  'Memory Palaces: Method of Loci',
+];
 
-            const equipmentValue = equipment.value;
-            const targetMuscles = Array.from(muscles).map(input => input.value);
+// ── BUILD UI ──────────────────────────────────────────────────────────────────
 
-            const workoutMap = {
-                bodyweight: {
-                    chest: 'Decline push-ups, standard push-ups, scapular push-ups.',
-                    back: 'Inverted rows, pull-up negatives, supermans.',
-                    shoulders: 'Pike push-ups, handstand practice, rear delt floor flies.',
-                    arms: 'Diamond push-ups, bodyweight tricep extensions, doorframe curls.',
-                    core: 'Planks, hollow body holds, leg raises.',
-                    legs: 'Bodyweight squats, lunges, glute bridges, calf raises.',
-                    neck: 'Prone neck extensions, supine neck flexion with slow control.'
-                },
-                bars: {
-                    chest: 'Incline feet-elevated pike push-ups, chest dips, ring push-ups.',
-                    back: 'Pull-ups, chin-ups, inverted rows, hanging scapular shrugs.',
-                    shoulders: 'Dips with vertical torso, hanging shoulder raises, assisted handstands.',
-                    arms: 'Close-grip chin-ups, tricep dips, neutral-grip pull-ups.',
-                    core: 'Hanging leg raises, toes-to-bar, L-sits on dip bars.',
-                    legs: 'Assisted pistol squats, Bulgarian split squats using bars, step-ups.',
-                    neck: 'Use bands or careful bodyweight neck control exercises off the bars.'
-                },
-                dumbbells: {
-                    chest: 'Incline dumbbell bench press, dumbbell flyes, dumbbell pullovers.',
-                    back: 'Single-arm dumbbell rows, dumbbell shrugs, dumbbell pullovers.',
-                    shoulders: 'Dumbbell shoulder press, lateral raises, rear delt raises.',
-                    arms: 'Incline dumbbell curls, hammer curls, overhead dumbbell extensions.',
-                    core: 'Dumbbell side bends, weighted Russian twists, dumbbell planks.',
-                    legs: 'Dumbbell squats, lunges, Romanian deadlifts, calf raises.',
-                    neck: 'Light dumbbell neck flexion and extension only with care.'
-                },
-                gym: {
-                    chest: 'Incline barbell bench press, cable crossovers, machine chest press.',
-                    back: 'Lat pulldowns, barbell rows, seated cable rows.',
-                    shoulders: 'Overhead barbell press, cable lateral raises, rear delt cable flyes.',
-                    arms: 'Preacher curls, cable pushdowns, cable hammer curls.',
-                    core: 'Cable crunches, ab wheel rollouts, captain’s chair leg raises.',
-                    legs: 'Back squats, leg press, Romanian deadlifts, seated calf raises.',
-                    neck: 'Neck harness extensions, light weighted neck flexion.'
-                }
-            };
+function uid(prefix) {
+  return prefix + '_' + Math.random().toString(36).slice(2,8);
+}
 
-            let results = '<p><strong>Equipment:</strong> ' + equipmentValue + '</p>';
-            results += '<p><strong>Targets:</strong> ' + targetMuscles.join(', ') + '</p>';
+// State: map of itemId -> checked
+let state = {};
+try { state = JSON.parse(localStorage.getItem('dailyProtocol_' + TODAY.toDateString()) || '{}'); } catch(e){}
 
-            targetMuscles.forEach(function(target) {
-                const workout = workoutMap[equipmentValue][target];
-                results += '<p><strong>' + target.charAt(0).toUpperCase() + target.slice(1) + ':</strong> ' + workout + '</p>';
-            });
+function save() { localStorage.setItem('dailyProtocol_' + TODAY.toDateString(), JSON.stringify(state)); }
 
-            resultBox.innerHTML = results;
-            resultBox.hidden = false;
-            quizForm.hidden = true;
-            redoButton.hidden = false;
-        });
+function toggle(id, el) {
+  state[id] = !state[id];
+  save();
+  if (state[id]) el.classList.add('completed'); else el.classList.remove('completed');
+  updateProgress();
+}
 
-        redoButton.addEventListener('click', function() {
-            quizForm.reset();
-            showSection(question1);
-            quizForm.hidden = false;
-            resultBox.hidden = true;
-            resultBox.textContent = '';
-            redoButton.hidden = true;
-        });
-    </script>
+let totalItems = 0;
+const allItemIds = [];
+
+function makeItem(text, id, sectionOverride) {
+  allItemIds.push(id);
+  totalItems++;
+  const div = document.createElement('div');
+  div.className = 'checklist-item' + (state[id] ? ' completed' : '');
+  div.dataset.id = id;
+  div.innerHTML = `
+    <div class="check-box">
+      <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+        <path d="M1 4L3.5 6.5L9 1" stroke="#0a0f0a" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="item-text">${text}</div>`;
+  div.addEventListener('click', () => toggle(id, div));
+  return div;
+}
+
+function makeSection(label) {
+  const div = document.createElement('div');
+  div.className = 'section-label';
+  div.textContent = label;
+  return div;
+}
+
+function makeTimeBlock(badgeText, badgeClass, title) {
+  const wrap = document.createElement('div');
+  wrap.className = 'time-block';
+
+  const hdr = document.createElement('div');
+  hdr.className = 'time-header';
+  hdr.innerHTML = `<div class="time-badge ${badgeClass}">Due ${badgeText}</div><div class="time-rule"></div>`;
+  wrap.appendChild(hdr);
+
+  const card = document.createElement('div');
+  card.className = 'block-card';
+  wrap.appendChild(card);
+
+  return { wrap, card };
+}
+
+const app = document.getElementById('app');
+
+// ─── 11 AM ───────────────────────────────────────────────────────────────────
+{
+  const { wrap, card } = makeTimeBlock('11 AM', 'red', 'Morning Routine');
+  const items = ['Brush Teeth + Brush Tongue','Wash Face','Lotion & Vaseline','Makeup','Comb Hair','Sunscreen'];
+  items.forEach(t => card.appendChild(makeItem(t, 'am11_' + t.replace(/\W+/g,'_'))));
+  app.appendChild(wrap);
+}
+
+// ─── 1 PM ────────────────────────────────────────────────────────────────────
+{
+  const { wrap, card } = makeTimeBlock('1 PM', 'yellow', 'Skills');
+
+  const morseId = uid('morse');
+  const morseItem = document.createElement('div');
+  morseItem.className = 'checklist-item' + (state['learn_morse'] ? ' completed' : '');
+  morseItem.innerHTML = `
+    <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0a0f0a" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+    <div class="item-text">Learn Morse Code <span class="item-arrow" id="morseToggle">▸ Study</span></div>`;
+  allItemIds.push('learn_morse'); totalItems++;
+  morseItem.querySelector('.check-box').addEventListener('click', (e) => { e.stopPropagation(); toggle('learn_morse', morseItem); });
+  card.appendChild(morseItem);
+
+  const morsePanel = document.createElement('div');
+  morsePanel.className = 'teach-panel';
+  morsePanel.id = 'morsePanel';
+  morsePanel.innerHTML = `<h3>Morse Code — International Standard</h3><div class="morse-grid" id="morseGrid"></div>
+    <p style="font-size:12px;color:#6b6b80;margin-top:8px">· = dot (short)  &nbsp; — = dash (long, 3× dot)</p>`;
+  card.appendChild(morsePanel);
+  morseItem.querySelector('#morseToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    morsePanel.classList.toggle('open');
+    e.target.textContent = morsePanel.classList.contains('open') ? '▾ Study' : '▸ Study';
+  });
+
+  const MORSE = {A:'·—',B:'—···',C:'—·—·',D:'—··',E:'·',F:'··—·',G:'——·',H:'····',I:'··',J:'·———',K:'—·—',L:'·—··',M:'——',N:'—·',O:'———',P:'·——·',Q:'——·—',R:'·—·',S:'···',T:'—',U:'··—',V:'···—',W:'·——',X:'—··—',Y:'—·——',Z:'——··','0':'—————','1':'·————','2':'··———','3':'···——','4':'····—','5':'·····','6':'—····','7':'——···','8':'———··','9':'————·'};
+  const mg = morsePanel.querySelector('#morseGrid');
+  Object.entries(MORSE).forEach(([ch,code])=>{
+    const d=document.createElement('div'); d.className='morse-item';
+    d.innerHTML=`<div class="char">${ch}</div><div class="code">${code}</div>`;
+    mg.appendChild(d);
+  });
+
+  const natoId = uid('nato');
+  const natoItem = document.createElement('div');
+  natoItem.className = 'checklist-item' + (state['learn_nato'] ? ' completed' : '');
+  natoItem.innerHTML = `
+    <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0a0f0a" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+    <div class="item-text">Learn NATO Phonetic Alphabet <span class="item-arrow" id="natoToggle">▸ Study</span></div>`;
+  allItemIds.push('learn_nato'); totalItems++;
+  natoItem.querySelector('.check-box').addEventListener('click', (e) => { e.stopPropagation(); toggle('learn_nato', natoItem); });
+  card.appendChild(natoItem);
+
+  const natoPanel = document.createElement('div');
+  natoPanel.className = 'teach-panel';
+  natoPanel.id = 'natoPanel';
+  natoPanel.innerHTML = `<h3>NATO Phonetic Alphabet</h3><div class="nato-grid" id="natoGrid"></div>`;
+  card.appendChild(natoPanel);
+  natoItem.querySelector('#natoToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    natoPanel.classList.toggle('open');
+    e.target.textContent = natoPanel.classList.contains('open') ? '▾ Study' : '▸ Study';
+  });
+
+  const NATO = [['A','Alpha','AL-fah'],['B','Bravo','BRAH-voh'],['C','Charlie','CHAR-lee'],['D','Delta','DEL-tah'],['E','Echo','EK-oh'],['F','Foxtrot','FOKS-trot'],['G','Golf','GOLF'],['H','Hotel','hoh-TEL'],['I','India','IN-dee-ah'],['J','Juliet','JEW-lee-et'],['K','Kilo','KEE-loh'],['L','Lima','LEE-mah'],['M','Mike','MIKE'],['N','November','no-VEM-ber'],['O','Oscar','OSS-car'],['P','Papa','PAH-pah'],['Q','Quebec','keh-BEK'],['R','Romeo','ROH-mee-oh'],['S','Sierra','see-AIR-rah'],['T','Tango','TANG-go'],['U','Uniform','YOU-ni-form'],['V','Victor','VIK-tah'],['W','Whiskey','WISS-key'],['X','X-ray','EKS-ray'],['Y','Yankee','YANG-kee'],['Z','Zulu','ZOO-loo']];
+  const ng = natoPanel.querySelector('#natoGrid');
+  NATO.forEach(([l,w,p])=>{
+    const d=document.createElement('div'); d.className='nato-item';
+    d.innerHTML=`<div class="letter">${l}</div><div class="word">${w}</div><div class="phonetic">${p}</div>`;
+    ng.appendChild(d);
+  });
+
+  app.appendChild(wrap);
+}
+
+// ─── 5 PM ────────────────────────────────────────────────────────────────────
+{
+  const { wrap, card } = makeTimeBlock('5 PM', 'accent', 'Afternoon Skills');
+  ['Learn Language','Chess','Memorize Randomized Deck of Cards','Practice Climbing or Basketball'].forEach(t=>{
+    card.appendChild(makeItem(t,'pm5_'+t.replace(/\W+/g,'_')));
+  });
+  app.appendChild(wrap);
+}
+
+// ─── 8 PM ────────────────────────────────────────────────────────────────────
+{
+  const { wrap, card } = makeTimeBlock('8 PM', 'green', 'Evening Routine');
+
+  // Makeup removal section
+  card.appendChild(makeSection('➡ Makeup Removal'));
+  card.appendChild(makeItem('Take Off Makeup', 'pm8_makeup_removal'));
+
+  // Hygiene section
+  card.appendChild(makeSection('Hygiene'));
+  ['Shower','Shave','Clip Nails','File Nails','Lotion','Vaseline'].forEach(t=>{
+    card.appendChild(makeItem(t,'pm8_'+t.replace(/\W+/g,'_')));
+  });
+
+  // Workout — day-specific
+  const workout = WORKOUT_BY_DAY[DAY];
+  if (workout) {
+    const dayLabel = document.createElement('div');
+    dayLabel.className = 'day-only-label';
+    dayLabel.textContent = '⚡ ' + workout.label;
+    card.appendChild(dayLabel);
+    workout.items.forEach(t => card.appendChild(makeItem(t,'pm8_workout_'+t.replace(/\W+/g,'_'))));
+  }
+
+  app.appendChild(wrap);
+}
+
+// ─── 10 PM ───────────────────────────────────────────────────────────────────
+{
+  const { wrap, card } = makeTimeBlock('10 PM', 'purple', 'Night Skills');
+  [
+    'Learn Tongue-Clicking Echolocation',
+    'Identify Every Sound Around You (5 minutes)',
+    'Balance on Left Leg (2 minutes)',
+    'Balance on Right Leg (2 minutes)',
+  ].forEach(t => card.appendChild(makeItem(t,'pm10_'+t.replace(/\W+/g,'_'))));
+  app.appendChild(wrap);
+}
+
+// ─── FRIDAY FULL DAY ─────────────────────────────────────────────────────────
+if (DAY === 5) {
+  const { wrap, card } = makeTimeBlock('Anytime', 'allday', 'Friday — Boxing & Conditioning');
+  FRIDAY_FULL.forEach(t => card.appendChild(makeItem(t,'fri_'+t.replace(/\W+/g,'_'))));
+  app.appendChild(wrap);
+}
+
+// ─── SUNDAY FULL DAY ─────────────────────────────────────────────────────────
+if (DAY === 0) {
+  const { wrap, card } = makeTimeBlock('Anytime', 'allday', 'Sunday — Combat & Study');
+
+  SUNDAY_FULL_ITEMS.forEach((t,i) => {
+    if (i === 1) {
+      // Kali item with teach panel
+      const item = document.createElement('div');
+      item.className = 'checklist-item' + (state['sun_kali'] ? ' completed' : '');
+      item.innerHTML = `
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0a0f0a" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="item-text">Knife Gripping (Kali) <span class="item-arrow" id="kaliToggle">▸ Lesson</span></div>`;
+      allItemIds.push('sun_kali'); totalItems++;
+      item.querySelector('.check-box').addEventListener('click', (e) => { e.stopPropagation(); toggle('sun_kali', item); });
+      card.appendChild(item);
+
+      const kaliPanel = document.createElement('div');
+      kaliPanel.className = 'teach-panel';
+      kaliPanel.innerHTML = `<h3>Kali / Arnis — Knife Gripping Fundamentals</h3>
+        <div class="kali-section">
+          <p><strong>What is Kali (Arnis/Eskrima)?</strong><br>
+          A Filipino martial art that is weapon-first. You train with sticks, knives, and empty hands interchangeably. Knife work (Daga) is central — the blade is an extension of the hand, not a separate skill.</p>
+          <p><strong>The Two Core Grips:</strong></p>
+          <ul>
+            <li><strong>Forward Grip (Sak-Sak)</strong> — Blade points forward past the pinky side of the fist. Thumb presses the spine of the handle. Most common for slashing and thrusting. Index finger and middle finger do the fine control; ring + pinky anchor the handle.</li>
+            <li><strong>Reverse Grip (Pakal)</strong> — Blade points down past the pinky. Thumb wraps over the top of the handle. Used for hooking, close-range work, and trapping an opponent's limb.</li>
+          </ul>
+          <p style="margin-top:10px"><strong>Grip Principles (apply to both):</strong></p>
+          <ul>
+            <li>Hold the handle firmly but not white-knuckle — tension travels up your arm and slows you.</li>
+            <li>The pinky and ring finger provide the anchor; the top two fingers guide direction.</li>
+            <li>Keep the wrist neutral. A cocked or bent wrist bleeds power and control.</li>
+            <li>Practice switching grips fluidly: sak-sak → pakal → sak-sak in one smooth hand motion without looking at the blade.</li>
+          </ul>
+          <p style="margin-top:10px"><strong>Drill: "Live Hand" Awareness</strong><br>
+          In Kali, your non-weapon hand (the "live hand") is always active — checking, redirecting, or trapping. While practicing grip transitions, keep your free hand raised and relaxed in a guard position. Never let it hang.</p>
+          <p><strong>Safety Note:</strong> Practice all grip and transition drills with a trainer knife or marked practice blade first. Speed comes after precision is automatic.</p>
+        </div>`;
+      card.appendChild(kaliPanel);
+      item.querySelector('#kaliToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        kaliPanel.classList.toggle('open');
+        e.target.textContent = kaliPanel.classList.contains('open') ? '▾ Lesson' : '▸ Lesson';
+      });
+    } else {
+      card.appendChild(makeItem(t,'sun_'+t.replace(/\W+/g,'_')));
+    }
+  });
+
+  // Books sub-checklist
+  card.appendChild(makeSection('📚 Reading Progress'));
+  SUNDAY_BOOKS.forEach(b => card.appendChild(makeItem(b,'sun_book_'+b.replace(/\W+/g,'_').slice(0,20))));
+
+  app.appendChild(wrap);
+}
+
+// ─── PROGRESS ────────────────────────────────────────────────────────────────
+function updateProgress() {
+  const done = allItemIds.filter(id => state[id]).length;
+  const pct = allItemIds.length ? Math.round(done/allItemIds.length*100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  let pt = document.getElementById('progressText');
+  if (!pt) { pt = document.createElement('p'); pt.className='progress-text'; pt.id='progressText'; app.appendChild(pt); }
+  pt.textContent = `${done} / ${allItemIds.length} completed — ${pct}%`;
+}
+
+// Reset button
+const resetBtn = document.createElement('button');
+resetBtn.className = 'reset-btn';
+resetBtn.textContent = '[ RESET DAY ]';
+resetBtn.addEventListener('click', () => {
+  if (!confirm('Clear all checks for today?')) return;
+  state = {};
+  save();
+  document.querySelectorAll('.checklist-item.completed').forEach(el => el.classList.remove('completed'));
+  updateProgress();
+});
+app.appendChild(resetBtn);
+
+updateProgress();
+</script>
 </body>
 </html>
